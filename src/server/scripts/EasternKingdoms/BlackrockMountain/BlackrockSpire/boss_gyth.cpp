@@ -27,7 +27,6 @@ enum Spells
     SPELL_REND_MOUNTS               = 16167, // Change model
     SPELL_CORROSIVE_ACID            = 16359, // Combat (self cast)
     SPELL_FLAMEBREATH               = 16390, // Combat (Self cast)
-    SPELL_FREEZE                    = 16350, // Combat (Self cast)
     SPELL_KNOCK_AWAY                = 10101, // Combat
     SPELL_SUMMON_REND               = 16328  // Summons Rend near death
 };
@@ -42,11 +41,10 @@ enum Misc
 enum Events
 {
     EVENT_CORROSIVE_ACID            = 1,
-    EVENT_FREEZE                    = 2,
-    EVENT_FLAME_BREATH              = 3,
-    EVENT_KNOCK_AWAY                = 4,
-    EVENT_SUMMONED_1                = 5,
-    EVENT_SUMMONED_2                = 6
+    EVENT_FLAME_BREATH              = 2,
+    EVENT_KNOCK_AWAY                = 3,
+    EVENT_SUMMONED_1                = 4,
+    EVENT_SUMMONED_2                = 5
 };
 
 struct boss_gyth : public BossAI
@@ -78,7 +76,6 @@ struct boss_gyth : public BossAI
         BossAI::JustEngagedWith(who);
 
         events.ScheduleEvent(EVENT_CORROSIVE_ACID, 8s, 16s);
-        events.ScheduleEvent(EVENT_FREEZE, 8s, 16s);
         events.ScheduleEvent(EVENT_FLAME_BREATH, 8s, 16s);
         events.ScheduleEvent(EVENT_KNOCK_AWAY, 12s, 18s);
     }
@@ -148,10 +145,6 @@ struct boss_gyth : public BossAI
                 case EVENT_CORROSIVE_ACID:
                     DoCast(me, SPELL_CORROSIVE_ACID);
                     events.ScheduleEvent(EVENT_CORROSIVE_ACID, 10s, 16s);
-                    break;
-                case EVENT_FREEZE:
-                    DoCast(me, SPELL_FREEZE);
-                    events.ScheduleEvent(EVENT_FREEZE, 10s, 16s);
                     break;
                 case EVENT_FLAME_BREATH:
                     DoCast(me, SPELL_FLAMEBREATH);
