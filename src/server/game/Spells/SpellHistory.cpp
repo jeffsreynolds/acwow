@@ -175,10 +175,11 @@ void SpellHistory::HandleCooldowns(SpellInfo const* spellInfo, uint32 itemID, Sp
         {
             if (itemTemplate->IsPotion())
             {
-                // Apply potion cooldown immediately to all on-use item spells.
-                for (ItemEffect const& itemEffect : itemTemplate->Effects)
-                    if (itemEffect.SpellID > 0 && itemEffect.TriggerType == ITEM_SPELLTRIGGER_ON_USE)
-                        if (SpellInfo const* itemSpellInfo = sSpellMgr->GetSpellInfo(itemEffect.SpellID))
+                // Start potion cooldown immediately instead of waiting for combat exit.
+                // Inline UpdatePotionCooldown logic without the IsInCombat() guard.
+                for (uint8 idx = 0; idx < itemTemplate->Effects.size(); ++idx)
+                    if (itemTemplate->Effects[idx].SpellID && itemTemplate->Effects[idx].TriggerType == ITEM_SPELLTRIGGER_ON_USE)
+                        if (SpellInfo const* itemSpellInfo = sSpellMgr->GetSpellInfo(itemTemplate->Effects[idx].SpellID))
                             SendCooldownEvent(itemSpellInfo, itemID, spell);
                 return;
             }
