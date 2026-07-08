@@ -175,7 +175,9 @@ void SpellHistory::HandleCooldowns(SpellInfo const* spellInfo, uint32 itemID, Sp
         {
             if (itemTemplate->IsPotion())
             {
-                // Potions now use their normal cooldown immediately instead of waiting for combat to end.
+                // Potions use their item-defined cooldown immediately, regardless of combat state.
+                SendCooldownEvent(spellInfo, itemID, spell);
+                return;
             }
             else if (spellInfo->IsCooldownStartedOnEvent())
             {
