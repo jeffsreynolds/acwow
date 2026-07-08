@@ -171,10 +171,13 @@ void SpellHistory::HandleCooldowns(SpellInfo const* spellInfo, uint32 itemID, Sp
 
     if (Player* player = _owner->ToPlayer())
     {
-        // potions start cooldown until exiting combat
         if (ItemTemplate const* itemTemplate = sObjectMgr->GetItemTemplate(itemID))
         {
-            if (itemTemplate->IsPotion() || spellInfo->IsCooldownStartedOnEvent())
+            if (itemTemplate->IsPotion())
+            {
+                // Potions now use their normal cooldown immediately instead of waiting for combat to end.
+            }
+            else if (spellInfo->IsCooldownStartedOnEvent())
             {
                 player->SetLastPotionId(itemID);
                 return;
